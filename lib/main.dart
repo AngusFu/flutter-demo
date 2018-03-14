@@ -5,6 +5,17 @@ import './CounterPage.dart';
 import './ListPage.dart';
 import './GesturePage.dart';
 
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+int counterReducer(int state, action) {
+  if (action == 'Actions.Increment') {
+    return state + 1;
+  }
+
+  return state;
+}
+
 final List<Product> kProducts = <Product>[
   new Product(name: '鸡蛋'),
   new Product(name: '面粉'),
@@ -12,10 +23,6 @@ final List<Product> kProducts = <Product>[
 ];
 
 final List<Map<String, String>> routes = [
-  {
-    "label": "List Demo",
-    "route": "/list",
-  },
   {
     "label": "List Demo",
     "route": "/list",
@@ -39,20 +46,25 @@ void main() {
 }
 
 class WemlionDemoApp extends StatelessWidget {
+  final store = new Store<int>(counterReducer, initialState: 0);
+
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: '奇舞擂台',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue
-      ),
-      home: new IndexPage(routes: routes),
-      routes: <String, WidgetBuilder> {
-        '/list': (BuildContext context) => new ListPage(),
-        '/counter': (BuildContext context) => new CounterPage(),
-        '/gesture': (BuildContext context) => new GesturePage(),
-        '/shopping-list': (BuildContext context) => new ShoppingListPage(products: kProducts),
-      },
+    return new StoreProvider(
+      store: store,
+      child: new MaterialApp(
+        title: 'My Flutter Demo',
+        theme: new ThemeData(
+          primarySwatch: Colors.blue
+        ),
+        home: new IndexPage(routes: routes),
+        routes: <String, WidgetBuilder> {
+          '/list': (BuildContext context) => new ListPage(),
+          '/counter': (BuildContext context) => new CounterPage(),
+          '/gesture': (BuildContext context) => new GesturePage(),
+          '/shopping-list': (BuildContext context) => new ShoppingListPage(products: kProducts),
+        },
+      )
     );
   }
 }

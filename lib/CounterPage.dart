@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 class CounterPage extends StatefulWidget {
   CounterPage({
@@ -41,9 +42,19 @@ class CounterPageState extends State<CounterPage> {
         ],
       ),
       body: new Center(
-        child: new CounterDisplay(count: count,),
+        child: new StoreConnector<int, int>(
+          converter: (store) => store.state,
+          builder: (context, count) => new CounterDisplay(count: count),
+        ),
       ),
-      floatingActionButton: new CounterIncrementor(onPressed: onPressed),
+      floatingActionButton: new StoreConnector<int, VoidCallback>(
+        converter: (store) {
+          return () => store.dispatch('Actions.Increment');
+        },
+        builder: (context, callback) {
+          return new CounterIncrementor(onPressed: callback);
+        }
+      ),
     );
   }
 }
@@ -76,7 +87,7 @@ class CounterDisplay extends StatelessWidget {
   Widget build (BuildContext context) {
     return new Center(
       child: new Text(
-        "点击了 $count 次数",
+        "点击了 $count 次",
         style: new TextStyle(
           fontSize: 24.0
         ),
