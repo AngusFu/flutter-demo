@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import './AppState.dart';
+
 class CounterPage extends StatefulWidget {
   CounterPage({
     Key key
@@ -13,14 +15,6 @@ class CounterPage extends StatefulWidget {
 }
 
 class CounterPageState extends State<CounterPage> {
-  int count = 0;
-
-  void onPressed () {
-    setState(() {
-      count += 1;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -42,14 +36,16 @@ class CounterPageState extends State<CounterPage> {
         ],
       ),
       body: new Center(
-        child: new StoreConnector<int, int>(
-          converter: (store) => store.state,
+        child: new StoreConnector<AppState, int>(
+          converter: (store) => store.state.count,
           builder: (context, count) => new CounterDisplay(count: count),
         ),
       ),
-      floatingActionButton: new StoreConnector<int, VoidCallback>(
+      floatingActionButton: new StoreConnector<AppState, VoidCallback>(
         converter: (store) {
-          return () => store.dispatch('Actions.Increment');
+          return () => store.dispatch({
+            'type': 'Actions.Increment'
+          });
         },
         builder: (context, callback) {
           return new CounterIncrementor(onPressed: callback);

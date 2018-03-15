@@ -4,23 +4,29 @@ import './ShoppingListPage.dart';
 import './CounterPage.dart';
 import './ListPage.dart';
 import './GesturePage.dart';
+import './AppState.dart';
 
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-int counterReducer(int state, action) {
-  if (action == 'Actions.Increment') {
-    return state + 1;
+AppState counterReducer(AppState state, action) {
+  switch (action['type']) {
+    case 'Actions.Increment':
+      state.count += 1;
+      break;
+    case 'Actions.RemoveFromCart':
+      state.shoppingCart.remove(action['payload']);
+      break;
+    case 'Actions.AddToCart':
+      state.shoppingCart.add(action['payload']);
+      break;
   }
-
   return state;
 }
 
-final List<Product> kProducts = <Product>[
-  new Product(name: '鸡蛋'),
-  new Product(name: '面粉'),
-  new Product(name: '巧克力脆片'),
-];
+void main() {
+  runApp(new WemlionDemoApp());
+}
 
 final List<Map<String, String>> routes = [
   {
@@ -41,12 +47,11 @@ final List<Map<String, String>> routes = [
   },
 ];
 
-void main() {
-  runApp(new WemlionDemoApp());
-}
-
 class WemlionDemoApp extends StatelessWidget {
-  final store = new Store<int>(counterReducer, initialState: 0);
+  final store = new Store<AppState>(
+    counterReducer,
+    initialState: new AppState()
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +67,7 @@ class WemlionDemoApp extends StatelessWidget {
           '/list': (BuildContext context) => new ListPage(),
           '/counter': (BuildContext context) => new CounterPage(),
           '/gesture': (BuildContext context) => new GesturePage(),
-          '/shopping-list': (BuildContext context) => new ShoppingListPage(products: kProducts),
+          '/shopping-list': (BuildContext context) => new ShoppingListPage(),
         },
       )
     );

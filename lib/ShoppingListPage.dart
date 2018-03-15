@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import './ShoppingListItem.dart';
 
+import 'package:flutter_redux/flutter_redux.dart';
+import './AppState.dart';
+
 class ShoppingListPage extends StatefulWidget {
   ShoppingListPage({
-    Key key,
-    this.products
+    Key key
   }) : super(key: key);
-
-  final List<Product> products;
 
   @override
   ShoppingListPageState createState() {
@@ -16,32 +16,30 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class ShoppingListPageState extends State<ShoppingListPage> {
-  int count = 0;
-  Set<Product> shoppingCart = new Set<Product>();
-
-  void handleCartChanged (Product product, bool inCart) {
-    setState(() {
-      inCart
-        ? shoppingCart.add(product)
-        : shoppingCart.remove(product);
-    });
-  }
-
-  void onPressed () {
-    setState(() {
-      count += 1;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    List products = widget.products.map((Product product) {
-      return new ShoppingListItem(
-        product: product,
-        inCart: shoppingCart.contains(product),
-        onCartChanged: handleCartChanged,
-      );
-    }).toList();
+     StoreConnector body = new StoreConnector<AppState, dynamic>(
+      converter: (store) => store,
+      builder: (context, store) {
+        CartChanedCallback handleCartChanged = (product, inCart) {
+          String type = inCart ? 'Actions.AddToCart' : 'Actions.RemoveFromCart';
+          store.dispatch({
+            'type': type,
+            'payload': product
+          });
+        };
+
+        return new Column(
+          children: store.state.productList.map((Product product) {
+            return new ShoppingListItem(
+              product: product,
+              inCart: store.state.shoppingCart.contains(product),
+              onCartChanged: handleCartChanged,
+            );
+          }).toList()
+        );
+      },
+    );
 
     return new Scaffold(
       appBar: new AppBar(
@@ -61,10 +59,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           )
         ],
       ),
-      body: new Column(
-        children: products
-      ),
-      // floatingActionButton: new CounterIncrementor(onPressed: onPressed),
+      body: body,
     );
   }
 }
