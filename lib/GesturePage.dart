@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GesturePage extends StatefulWidget {
+  static final String route = "/gesture";
+  static final String title = "Gesture Demo";
+
   GesturePage({
     Key key
   }) : super(key: key);

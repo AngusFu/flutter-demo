@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import './ShoppingListItem.dart';
-
 import 'package:flutter_redux/flutter_redux.dart';
+import './ShoppingListItem.dart';
 import './AppState.dart';
 
 class ShoppingListPage extends StatefulWidget {
+  static final String route = "/shopping-list";
+  static final String title = "Shopping List Demo";
+
   ShoppingListPage({
     Key key
   }) : super(key: key);

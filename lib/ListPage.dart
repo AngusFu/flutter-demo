@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ListPage extends StatefulWidget {
+  static final String route = "/list";
+  static final String title = "List Demo";
+
   ListPage({
     Key key
   }): super(key: key);

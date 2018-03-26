@@ -4,6 +4,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import './AppState.dart';
 
 class CounterPage extends StatefulWidget {
+  static final String route = "/counter";
+  static final String title = "Counter Demo";
+
   CounterPage({
     Key key
   }) : super(key: key);

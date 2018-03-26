@@ -10,23 +10,4 @@ class AppState {
     new Product(name: '巧克力脆片'),
     new Product(name: '不知道什么'),
   ];
-
-  List<Map<String, String>> routes = [
-    {
-      "label": "List Demo",
-      "route": "/list",
-    },
-    {
-      "label": "Counter Demo",
-      "route": "/counter",
-    },
-    {
-      "label": "Gesture Demo",
-      "route": "/gesture",
-    },
-    {
-      "label": "Shopping List Demo",
-      "route": "/shopping-list",
-    },
-  ];
 }
